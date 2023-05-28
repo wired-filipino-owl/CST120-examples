@@ -7,6 +7,9 @@
 
 #include "MAX7219.h"
 
+uint8_t current_char[8] = {};
+bool char_filled = false;
+
 void SetupSPI()
 {
 	//set MOSI, SCK, and CS as outputs
@@ -209,4 +212,74 @@ void ScrollCharacterLeftInverted(const uint8_t character[8])
 		
 		_delay_ms(SCROLL_DELAY);
 	}
+}
+
+void ScrollContinuous(const uint8_t first[8], const uint8_t second[8])
+{
+	for (int shift = 0; shift < 9; shift++)
+	{
+		for (int row = 1; row < 9; row++)
+		{
+			PORTB &= (0 << CS);
+			SendByte(row);
+			SendByte( (first[row-1] << shift) | (second[row-1] >> (8 - shift) ) );
+			PORTB |= (1 << CS);
+			_delay_us(10);			
+		}
+		_delay_ms(SCROLL_DELAY);
+	}
+}
+
+void ScrollInLeft(uint8_t * character)
+{
+	if(!char_filled)
+	{
+		memset(current_char, 0, sizeof(uint8_t[8]) );
+	}
+	
+	for (int shift = 0; shift < 9; shift++)
+	{
+		for (int row = 1; row < 9; row++)
+		{
+			PORTB &= (0 << CS);
+			SendByte(row);
+			SendByte( (current_char[row-1] << shift) | (character[row-1] >> (8 - shift) ) );
+			PORTB |= (1 << CS);
+			_delay_us(10);
+		}
+		_delay_ms(SCROLL_DELAY);
+	}
+	
+	memcpy((void*) &current_char, (const void *) character, sizeof(uint8_t[8]));
+	char_filled = true;
+}
+
+void ScrollInRight(uint8_t * character)
+{
+	if(!char_filled)
+	{
+		memset(current_char, 0, sizeof(uint8_t[8]) );
+	}
+	
+	for (int shift = 0; shift < 9; shift++)
+	{
+		for (int row = 1; row < 9; row++)
+		{
+			PORTB &= (0 << CS);
+			SendByte(row);
+			SendByte( (current_char[row-1] >> shift ) | (character[row-1] << (8 - shift) ) );
+			PORTB |= (1 << CS);
+			_delay_us(10);
+		}
+		_delay_ms(SCROLL_DELAY);
+	}
+	
+	memcpy((void*) &current_char, (const void *) character, sizeof(uint8_t[8]));
+	char_filled = true;
+}
+
+void ClearScrollChar()
+{
+	memset(current_char, 0, sizeof(uint8_t[8]) );
+	char_filled = false;
 }

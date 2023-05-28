@@ -22,6 +22,8 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <string.h>
+#include <stdbool.h>
 
 void SetupSPI();
 void SendByte(uint8_t byte);
@@ -35,5 +37,9 @@ void ScrollCharacterRight(const uint8_t character[8]);
 void ScrollCharacterLeft(const uint8_t character[8]);
 void ScrollCharacterRightInverted(const uint8_t character[8]);
 void ScrollCharacterLeftInverted(const uint8_t character[8]);
+void ScrollContinuous(const uint8_t first[8], const uint8_t second[8]);
+void ScrollInLeft(uint8_t * character);
+void ScrollInRight(uint8_t * character);
+void ClearScrollChar();
 
 #endif /* MAX7219_H_ */

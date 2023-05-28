@@ -80,11 +80,11 @@ const uint8_t q_mark[8] =
 
 const uint8_t sm_face[8] =
 {
+	0b11111111,
 	0b11011011,
 	0b11011011,
 	0b11011011,
-	0b11011011,
-	0b01111110,
+	0b11111111,
 	0b10111101,
 	0b11011011,
 	0b11100111	
@@ -190,8 +190,33 @@ int main(void)
 		
 		ScrollCharacterLeftInverted(exc_mark);
 		_delay_ms(750);
-						
 		ClearDisplay();
-		_delay_ms(500);
+		_delay_ms(750);
+		
+		//continuous scrolling like on a stock ticker display
+		
+		ScrollInLeft(&letter_r);
+		ScrollInLeft(&letter_o);
+		ScrollInLeft(&letter_b);
+				
+		ScrollInLeft(&letter_r);
+		ScrollInLeft(&letter_o);
+		ScrollInLeft(&letter_b);
+				
+		ClearDisplay();
+		ClearScrollChar();
+		_delay_ms(750);
+		
+		ScrollInRight(&sm_face);
+		ScrollInRight(&exc_mark);
+		ScrollInRight(&q_mark);
+		
+		ScrollInRight(&sm_face);
+		ScrollInRight(&exc_mark);
+		ScrollInRight(&q_mark);
+		
+		ClearDisplay();
+		ClearScrollChar();
+		_delay_ms(750);
     }
 }
