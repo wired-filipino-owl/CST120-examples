@@ -1,4 +1,7 @@
-#define FREQUENCY 250
+//This program will generate a wave of FREQUENCY at 50% duty cycle on pin D2
+//Set the frequency with the #define below
+
+#define FREQUENCY 450
 unsigned long now = 0;
 int pulse_time = (1000000 / FREQUENCY) / 2; //pulse time in microseconds
 
